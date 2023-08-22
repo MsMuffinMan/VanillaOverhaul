@@ -55,7 +55,7 @@ public class TiersMod {
     // Creates a creative tab with the id "tiersMod:example_tab" for the example item, that is placed after the combat tab
     public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("tiers_mod", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> VanillaItems.IRON_PICKAXE.get().getDefaultInstance())
+            .icon(() -> VanillaItems.GOLDEN_AXE.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
             }).build());
