@@ -1,9 +1,16 @@
 package com.tool_stats;
 
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
@@ -12,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,7 +33,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.codehaus.plexus.util.CollectionUtils;
 import org.slf4j.Logger;
+
+import java.util.Collection;
 
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -42,6 +53,9 @@ public class TiersMod {
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "tiersMod" namespace
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
+    public static final DeferredRegister<Item> MODDED_TOOLS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+
+
 
     // Creates a new Block with the id "tiersMod:example_block", combining the namespace and path
     public static final RegistryObject<Block> EXAMPLE_BLOCK = BLOCKS.register("example_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
@@ -51,6 +65,9 @@ public class TiersMod {
     // Creates a new food item with the id "tiersMod:example_id", nutrition 1 and saturation 2
     public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
             .alwaysEat().nutrition(1).saturationMod(2f).build())));
+
+    public static final RegistryObject<Item> SOCKET_IRON_SWORD = MODDED_TOOLS.register("socket_iron__sword", () -> new ModdedSwordItem(ModdedTiers.IRON, 3, -2.4F, new Item.Properties()));
+
 
     // Creates a creative tab with the id "tiersMod:example_tab" for the example item, that is placed after the combat tab
     public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("tiers_mod", () -> CreativeModeTab.builder()
@@ -75,6 +92,7 @@ public class TiersMod {
 
         VanillaItems.VANILLA_TOOLS.register(modEventBus);
         VanillaEnchantments.VANILLA_ENCHANTMENTS.register(modEventBus);
+        MODDED_TOOLS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -82,7 +100,7 @@ public class TiersMod {
         // Register the item to a creative tab
         //modEventBus.addListener(this::addCreative);
 
-        //ModdedTiers.registerAllTiers();
+        ModdedTiers.registerAllTiers();
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ToolStatsConfig.SPEC);
@@ -114,6 +132,38 @@ public class TiersMod {
     {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
+    }
+
+    @SubscribeEvent
+    public void showAnvilCrafting(AnvilUpdateEvent event)
+    {
+        if(event.isCanceled()) {
+            return;
+        }
+
+        ItemStack left  = event.getLeft();
+        ItemStack right = event.getRight();
+        ItemStack output;
+
+        if (left.getItem() instanceof SwordItem && right.getItem() instanceof SwordItem) {
+
+            output = left.copy();
+
+            Multimap<Attribute, AttributeModifier> map = output.getAttributeModifiers(EquipmentSlot.MAINHAND);
+            Collection<AttributeModifier> modifiers = map.get(Attributes.ATTACK_DAMAGE);
+            AttributeModifier damageModifier = null;
+            if (modifiers.iterator().hasNext()) {
+                damageModifier = modifiers.iterator().next();
+            }
+            double leftAmount = damageModifier != null ? damageModifier.getAmount() : 0;
+            leftAmount *= 2;
+
+            output.addAttributeModifier(Attributes.ATTACK_DAMAGE, ((ModdedSwordItem) SOCKET_IRON_SWORD.get()).setAttackDamage(leftAmount), EquipmentSlot.MAINHAND);
+
+            event.setOutput(output);
+            event.setCost(1);
+            event.setMaterialCost(1);
+        }
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
