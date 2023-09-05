@@ -7,4 +7,13 @@ magicNumber = 42
 magicNumberIntroduction = "The magic number is... "
 #A list of items to log on common setup.
 items = ["minecraft:iron_ingot"]
+#Maximum tool level, range 1-99.
+#Range: 1 ~ 99
+maxToolLevel = 10
+#Tool experience per valid block broken. 0 effectively disables the functionality.
+#Range: > 0
+toolExpPerBlock = 1
+#Tool experience needed to level up.
+#Range: > 1
+toolExpToLevel = 100
 

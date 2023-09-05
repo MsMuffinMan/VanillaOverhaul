@@ -36,6 +36,18 @@ public class ToolStatsConfig
             .comment("A list of items to log on common setup.")
             .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), ToolStatsConfig::validateItemName);
 
+    private static final ForgeConfigSpec.IntValue MAX_TOOL_LEVEL = BUILDER
+        .comment("Maximum tool level, range 1-99.")
+        .defineInRange("maxToolLevel", 10, 1, 99);
+
+    private static final ForgeConfigSpec.IntValue TOOL_EXP_PER_BLOCK = BUILDER
+        .comment("Tool experience per valid block broken. 0 effectively disables the functionality.")
+        .defineInRange("toolExpPerBlock", 1, 0, Integer.MAX_VALUE);
+
+    private static final ForgeConfigSpec.IntValue TOOL_EXP_TO_LEVEL = BUILDER
+        .comment("Tool experience needed to level up.")
+        .defineInRange("toolExpToLevel", 100, 1, Integer.MAX_VALUE);
+
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static boolean logDirtBlock;
@@ -43,6 +55,9 @@ public class ToolStatsConfig
     public static String magicNumberIntroduction;
     public static Set<Item> items;
 
+    public static int maxToolLevel;
+    public static int toolExpPerBlock;
+    public static int toolExpToLevel;
     private static boolean validateItemName(final Object obj)
     {
         return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
@@ -54,6 +69,10 @@ public class ToolStatsConfig
         logDirtBlock = LOG_DIRT_BLOCK.get();
         magicNumber = MAGIC_NUMBER.get();
         magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
+
+        maxToolLevel = MAX_TOOL_LEVEL.get();
+        toolExpPerBlock = TOOL_EXP_PER_BLOCK.get();
+        toolExpToLevel = TOOL_EXP_TO_LEVEL.get();
 
         // convert the list of strings into a set of items
         items = ITEM_STRINGS.get().stream()
