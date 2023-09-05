@@ -11,7 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class AnvilHandler {
 
     @SubscribeEvent
-    public static void UpdateAnvil(AnvilUpdateEvent event) {
+    public void UpdateAnvil(AnvilUpdateEvent event) {
         ItemStack left = event.getLeft();
         ItemStack right = event.getRight();
         ItemStack output;
