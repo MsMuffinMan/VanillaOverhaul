@@ -1,5 +1,6 @@
 package com.eventhandlers;
 
+import com.registries.TiersModItemsRegister;
 import com.tool_stats.TiersMod;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +19,7 @@ public class AnvilHandler {
 
         if (left.getItem() instanceof DiggerItem && (Items.DIAMOND).equals(right.getItem())) {
 
-            output = new ItemStack(TiersMod.MODDED_IRON_PICKAXE.get());
+            output = new ItemStack(TiersModItemsRegister.MODDED_IRON_PICKAXE.get());
 
             event.setOutput(output);
             event.setCost(1);

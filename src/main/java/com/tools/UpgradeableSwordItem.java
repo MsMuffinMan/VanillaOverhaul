@@ -1,26 +1,32 @@
-package com.tool_stats;
+package com.tools;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class UpgradeableShovelItem extends ShovelItem implements UpgradeableTool {
+public class UpgradeableSwordItem extends SwordItem implements UpgradeableTool {
 
     private int currentExp;
     private int currentLevel;
 
-    public UpgradeableShovelItem(Tier p_42961_, int p_42962_, float p_42963_, Properties p_42964_) {
-        super(p_42961_, p_42962_, p_42963_, p_42964_);
+    public UpgradeableSwordItem(Tier p_43269_, int p_43270_, float p_43271_, Properties p_43272_) {
+        super(p_43269_, p_43270_, p_43271_, p_43272_);
         this.currentExp = 0;
         this.currentLevel = 0;
     }
+
 
     @Override
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
         float normalSpeed = super.getDestroySpeed(itemStack, blockState);
         return normalSpeed + getCurrentLevel();
+    }
+
+    @Override
+    public float getDamage() {
+        float baseDmg = super.getDamage();
+        return baseDmg + getCurrentLevel();
     }
 
     @Override

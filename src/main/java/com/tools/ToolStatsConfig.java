@@ -1,5 +1,6 @@
-package com.tool_stats;
+package com.tools;
 
+import com.tool_stats.TiersMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -48,7 +49,7 @@ public class ToolStatsConfig
         .comment("Tool experience needed to level up.")
         .defineInRange("toolExpToLevel", 100, 1, Integer.MAX_VALUE);
 
-    static final ForgeConfigSpec SPEC = BUILDER.build();
+    public static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static boolean logDirtBlock;
     public static int magicNumber;

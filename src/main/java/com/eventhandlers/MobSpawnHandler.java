@@ -1,5 +1,6 @@
 package com.eventhandlers;
 
+import com.registries.TiersModEntityRegister;
 import com.tool_stats.TiersMod;
 import com.villagers.BiomeWanderingTrader;
 import net.minecraft.world.entity.EntityType;
@@ -15,7 +16,7 @@ public class MobSpawnHandler {
     public void modSpawn(FinalizeSpawn event) {
         if (event.getEntity() instanceof WanderingTrader && !(event.getEntity() instanceof BiomeWanderingTrader)) {
             //Convert to one of my custom types and cancel the original event.
-            BiomeWanderingTrader biomeWanderer = new BiomeWanderingTrader(TiersMod.BIOME_WANDERING_TRADER.get(), (Level) event.getLevel());
+            BiomeWanderingTrader biomeWanderer = new BiomeWanderingTrader(TiersModEntityRegister.BIOME_WANDERING_TRADER.get(), (Level) event.getLevel());
             event.setCanceled(true);
             ForgeEventFactory.onFinalizeSpawn(biomeWanderer, event.getLevel(), event.getDifficulty(), event.getSpawnType(), event.getSpawnData(), event.getSpawnTag());
 

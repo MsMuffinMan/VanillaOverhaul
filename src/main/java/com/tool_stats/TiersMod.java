@@ -1,27 +1,20 @@
 package com.tool_stats;
 
-
 import com.eventhandlers.AnvilHandler;
 import com.eventhandlers.BlockBreakHandler;
 import com.eventhandlers.LivingEntityHandler;
 import com.eventhandlers.MobSpawnHandler;
 import com.eventhandlers.RightClickHandler;
 import com.mojang.logging.LogUtils;
-import com.villagers.BiomeWanderingTrader;
+import com.registries.TiersModBlocksRegister;
+import com.registries.TiersModEntityRegister;
+import com.registries.TiersModItemsRegister;
+import com.tools.ToolStatsConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.Item.Properties;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -39,6 +32,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
 
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TiersMod.MODID)
 public class TiersMod {
@@ -46,45 +40,18 @@ public class TiersMod {
     public static final String MODID = "tiersmod";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
-    // Create a Deferred Register to hold Blocks which will all be registered under the "tiersMod" namespace
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-    // Create a Deferred Register to hold Items which will all be registered under the "tiersMod" namespace
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "tiersMod" namespace
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-
-    // Create a Deferred Register to hold new Entity Types which will all be registered under the "tiersMod" namespace
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
-
-    // Creates a new Block with the id "tiersMod:example_block", combining the namespace and path
-    public static final RegistryObject<Block> EXAMPLE_BLOCK = BLOCKS.register("example_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
-    // Creates a new BlockItem with the id "tiersMod:example_block", combining the namespace and path
-    public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("example_block", () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties()));
-
-    public static final RegistryObject<EntityType<BiomeWanderingTrader>> BIOME_WANDERING_TRADER = ENTITY_TYPES.register("biome_wandering_trader",
-            () -> EntityType.Builder.of(BiomeWanderingTrader::new, MobCategory.CREATURE).sized(0.6F, 1.95F).clientTrackingRange(10)
-                    .build(new ResourceLocation(MODID, "biome_wandering_trader").toString()));
-
-    // Creates a new food item with the id "tiersMod:example_id", nutrition 1 and saturation 2
-    public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item",
-            () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
-                    .alwaysEat().nutrition(1).saturationMod(2f).build())));
-
-    public static final RegistryObject<Item> MODDED_IRON_PICKAXE = ITEMS.register("modded_iron_pickaxe",
-            () -> new UpgradeablePickaxeItem(ModdedTiers.IRON, 1, -2.8F, new Properties()));
-
-    public static final RegistryObject<Item> NETHER_WANDERING_TRADER_EGG = ITEMS.register("nether_wandering_trader_egg",
-            () -> new ForgeSpawnEggItem(BIOME_WANDERING_TRADER, 4547222, 15377456, new Item.Properties()));
-
 
     // Creates a creative tab with the id "tiersMod:example_tab" for the example item, that is placed after the combat tab
     public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("tiers_mod", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> VanillaItems.GOLDEN_AXE.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                output.accept(MODDED_IRON_PICKAXE.get());
-                output.accept(NETHER_WANDERING_TRADER_EGG.get());
-                output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(TiersModItemsRegister.MODDED_IRON_PICKAXE.get());
+                output.accept(TiersModItemsRegister.NETHER_WANDERING_TRADER_EGG.get());
+                output.accept(TiersModItemsRegister.EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
             }).build());
 
     public TiersMod() {
@@ -94,12 +61,12 @@ public class TiersMod {
         modEventBus.addListener(this::commonSetup);
 
         // Register the Deferred Register to the mod event bus so blocks get registered
-        BLOCKS.register(modEventBus);
+        TiersModBlocksRegister.BLOCKS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so items get registered
-        ITEMS.register(modEventBus);
+        TiersModItemsRegister.ITEMS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
-        ENTITY_TYPES.register(modEventBus);
+        TiersModEntityRegister.ENTITY_TYPES.register(modEventBus);
 
         VanillaItems.VANILLA_TOOLS.register(modEventBus);
         VanillaEnchantments.VANILLA_ENCHANTMENTS.register(modEventBus);
@@ -139,7 +106,7 @@ public class TiersMod {
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
-            event.accept(EXAMPLE_BLOCK_ITEM);
+            event.accept(TiersModItemsRegister.EXAMPLE_BLOCK_ITEM);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

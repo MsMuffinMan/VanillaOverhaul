@@ -1,12 +1,10 @@
 package com.eventhandlers;
 
 import com.fishing.LootCrateRegister;
-import com.tool_stats.TiersMod;
-import com.tool_stats.ToolStatsConfig;
-import com.tool_stats.UpgradeableTool;
+import com.tools.ToolStatsConfig;
+import com.tools.UpgradeableTool;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.Tags.Blocks;
 import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

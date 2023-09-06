@@ -1,10 +1,8 @@
-package com.tool_stats;
+package com.tools;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.LiteralContents;
 
 public interface UpgradeableTool {
 

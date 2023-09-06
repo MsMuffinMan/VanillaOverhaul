@@ -1,16 +1,16 @@
-package com.tool_stats;
+package com.tools;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class UpgradeablePickaxeItem extends PickaxeItem implements UpgradeableTool {
+public class UpgradeableShovelItem extends ShovelItem implements UpgradeableTool {
 
     private int currentExp;
     private int currentLevel;
 
-    public UpgradeablePickaxeItem(Tier p_42961_, int p_42962_, float p_42963_, Properties p_42964_) {
+    public UpgradeableShovelItem(Tier p_42961_, int p_42962_, float p_42963_, Properties p_42964_) {
         super(p_42961_, p_42962_, p_42963_, p_42964_);
         this.currentExp = 0;
         this.currentLevel = 0;

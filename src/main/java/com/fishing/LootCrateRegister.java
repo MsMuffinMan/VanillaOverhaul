@@ -1,5 +1,6 @@
 package com.fishing;
 
+import com.registries.TiersModItemsRegister;
 import com.tool_stats.TiersMod;
 import com.tool_stats.VanillaItems;
 import net.minecraft.world.item.CreativeModeTab;
@@ -11,13 +12,13 @@ import net.minecraftforge.registries.RegistryObject;
 public class LootCrateRegister {
 
 
-    public static final RegistryObject<Item> COMMON_LOOT_CRATE = TiersMod.ITEMS.register("common_loot_crate",
+    public static final RegistryObject<Item> COMMON_LOOT_CRATE = TiersModItemsRegister.ITEMS.register("common_loot_crate",
         () -> new LootCrate(Rarity.COMMON));
-    public static final RegistryObject<Item> UNCOMMON_LOOT_CRATE = TiersMod.ITEMS.register("uncommon_loot_crate",
+    public static final RegistryObject<Item> UNCOMMON_LOOT_CRATE = TiersModItemsRegister.ITEMS.register("uncommon_loot_crate",
         () -> new LootCrate(Rarity.UNCOMMON));
-    public static final RegistryObject<Item> RARE_LOOT_CRATE = TiersMod.ITEMS.register("rare_loot_crate",
+    public static final RegistryObject<Item> RARE_LOOT_CRATE = TiersModItemsRegister.ITEMS.register("rare_loot_crate",
         () -> new LootCrate(Rarity.RARE));
-    public static final RegistryObject<Item> EPIC_LOOT_CRATE = TiersMod.ITEMS.register("epic_loot_crate",
+    public static final RegistryObject<Item> EPIC_LOOT_CRATE = TiersModItemsRegister.ITEMS.register("epic_loot_crate",
         () -> new LootCrate(Rarity.EPIC));
 
 
